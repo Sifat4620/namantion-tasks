@@ -1,11 +1,17 @@
 <?php
 
 use App\Http\Controllers\NominationController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\LoginController;
 
 
-// Route to display the form
-Route::get('/', [NominationController::class, 'showForm'])->name('nomination.form');
+// Show login form
+Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
 
-// Route to handle form submission
-Route::post('/submit-nomination', [NominationController::class, 'submitForm'])->name('nomination.submit');
+// Handle login submission
+Route::post('login', [LoginController::class, 'login']);
+// Route to display the form - accessible only to authenticated users
+Route::get('/', [NominationController::class, 'showForm'])->name('nomination.form')->middleware('auth');
 
+// Route to handle form submission - accessible only to authenticated users
+Route::post('/submit-nomination', [NominationController::class, 'submitForm'])->name('nomination.submit')->middleware('auth');
